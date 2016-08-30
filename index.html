@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -85,26 +85,41 @@
       
         <h1 id="はじめに"><a href="#はじめに" class="headerlink" title="はじめに"></a>はじめに</h1><p>先日、Ruby on Railsを使って、簡単なTODOアプリを作りました。この記事では、このアプリのソースコードについて、簡単に解説します。</p>
 <h1 id="Ruby-on-Railsとは"><a href="#Ruby-on-Railsとは" class="headerlink" title="Ruby on Railsとは"></a>Ruby on Railsとは</h1><p>MVCを元にWebアプリ開発ためのフレームワークです。</p>
-<h1 id="MVCとは"><a href="#MVCとは" class="headerlink" title="MVCとは"></a>MVCとは</h1><h1 id="ソースコード"><a href="#ソースコード" class="headerlink" title="ソースコード"></a>ソースコード</h1><p>ソースコードは、githubにアップしました。<br><a href="https://github.com/Youfar/simplyTODO" target="_blank" rel="external">https://github.com/Youfar/simplyTODO</a></p>
-<h1 id="ソースコードの解説"><a href="#ソースコードの解説" class="headerlink" title="ソースコードの解説"></a>ソースコードの解説</h1><h2 id="1-アプリhomepageを設定"><a href="#1-アプリhomepageを設定" class="headerlink" title="1 アプリhomepageを設定"></a>1 アプリhomepageを設定</h2><p>ルーティングとは、ブラウザでURLを指定してアクセスする時にどのActionを実行するかを指定することです</p>
-<p>具体的には、config/routes.rbを開けて、下記の内容を追加します。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Rails.application.routes.draw do</div><div class="line">  root &apos;todo_lists#new&apos;</div><div class="line">  end</div></pre></td></tr></table></figure>
-<p>アプリのルートurlへのアクセスはtodo_listコントローラのnewアクションを指定します</p>
-<h2 id="1-モデルとコントローラの作成"><a href="#1-モデルとコントローラの作成" class="headerlink" title="1 モデルとコントローラの作成"></a>1 モデルとコントローラの作成</h2><h3 id="1-1-モデルの作成"><a href="#1-1-モデルの作成" class="headerlink" title="1.1 モデルの作成"></a>1.1 モデルの作成</h3><p>todo_itemモデルは、todo_listへの参照を保持します<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rails generate model todo_list title:string</div><div class="line">$ rails generate model todo_item content:text difficulty:text deadline:text todo_list:reference</div></pre></td></tr></table></figure></p>
+<h1 id="MVCとは"><a href="#MVCとは" class="headerlink" title="MVCとは"></a>MVCとは</h1><p>Model: データを扱う部分<br>View: HTMLを作る部分<br>Controller: ユーザーからの要求を処理し、モデルやビューと連携を行なう</p>
+<p>後ほど、詳しく説明します。</p>
+<h1 id="ソースコード"><a href="#ソースコード" class="headerlink" title="ソースコード"></a>ソースコード</h1><p>ソースコードは、githubにアップしました。<br><a href="https://github.com/Youfar/simplyTODO" target="_blank" rel="external">https://github.com/Youfar/simplyTODO</a></p>
+<h1 id="ソースコードの解説"><a href="#ソースコードの解説" class="headerlink" title="ソースコードの解説"></a>ソースコードの解説</h1><h2 id="1-モデルとコントローラの作成"><a href="#1-モデルとコントローラの作成" class="headerlink" title="1 モデルとコントローラの作成"></a>1 モデルとコントローラの作成</h2><h3 id="1-1-モデルの作成"><a href="#1-1-モデルの作成" class="headerlink" title="1.1 モデルの作成"></a>1.1 モデルの作成</h3><p>todo_itemモデルは、todo_listへの参照を保持します<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rails generate model todo_list title:string</div><div class="line">$ rails generate model todo_item content:text difficulty:text deadline:text todo_list:reference</div></pre></td></tr></table></figure></p>
 <p>また、マイグレーションコマンドによってtodo_list、todo_itemテーブルがデータベース上に作成されます<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rake db:migrate</div></pre></td></tr></table></figure></p>
-<h3 id="1-1-モデルの関連付け"><a href="#1-1-モデルの関連付け" class="headerlink" title="1.1 モデルの関連付け"></a>1.1 モデルの関連付け</h3><p>そして、関連付けを設定します。一つのリストは複数のitemがあります。一つのitemは1つのリストに属する。todo_listモデルapp/models/todo_list.rbを編集して、todo_itemsモデルを追加する必要があります。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class TodoList &lt; ApplicationRecord</div><div class="line">  has_many :todo_items</div><div class="line">end</div></pre></td></tr></table></figure></p>
-<h3 id="1-2-ルーティング設定"><a href="#1-2-ルーティング設定" class="headerlink" title="1.2 ルーティング設定"></a>1.2 ルーティング設定</h3><p>resourcesメソッドを利用してRESTリソースへの標準的なルーティングを宣言できます。config/routes.rbを開けて、下記の内容を追加します。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Rails.application.routes.draw do</div><div class="line">  resources :todo_lists do</div><div class="line">    resources :todo_items</div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure></p>
-<h3 id="1-3-アプリhomepageを設定"><a href="#1-3-アプリhomepageを設定" class="headerlink" title="1.3 アプリhomepageを設定"></a>1.3 アプリhomepageを設定</h3><p>具体的には、config/routes.rbを開けて、下記の内容を追加します。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Rails.application.routes.draw do</div><div class="line">  resources :todo_lists do</div><div class="line">    resources :todo_items</div><div class="line">  end</div><div class="line">  root &apos;todo_lists#new&apos;</div><div class="line">end</div></pre></td></tr></table></figure></p>
+<h3 id="1-2-モデルの関連付け"><a href="#1-2-モデルの関連付け" class="headerlink" title="1.2 モデルの関連付け"></a>1.2 モデルの関連付け</h3><p>そして、関連付けを設定します。一つのリストは複数のitemがあります。一つのitemは1つのリストに属する。todo_listモデルapp/models/todo_list.rbを編集して、todo_itemsモデルを追加する必要があります。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class TodoList &lt; ApplicationRecord</div><div class="line">  has_many :todo_items</div><div class="line">end</div></pre></td></tr></table></figure></p>
+<h3 id="1-3-ルーティング設定"><a href="#1-3-ルーティング設定" class="headerlink" title="1.3 ルーティング設定"></a>1.3 ルーティング設定</h3><p>resourcesメソッドを利用してRESTリソースへの標準的なルーティングを宣言できます。config/routes.rbを開けて、下記の内容を追加します。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Rails.application.routes.draw do</div><div class="line">  resources :todo_lists do</div><div class="line">    resources :todo_items</div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure></p>
+<h3 id="1-4-アプリhomepageを設定"><a href="#1-4-アプリhomepageを設定" class="headerlink" title="1.4 アプリhomepageを設定"></a>1.4 アプリhomepageを設定</h3><p>具体的には、config/routes.rbを開けて、下記の内容を追加します。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Rails.application.routes.draw do</div><div class="line">  resources :todo_lists do</div><div class="line">    resources :todo_items</div><div class="line">  end</div><div class="line">  root &apos;todo_lists#new&apos;</div><div class="line">end</div></pre></td></tr></table></figure></p>
 <p>アプリのルートurlへのアクセスはtodo_listコントローラのnewアクションを指定します</p>
-<h2 id="1-4-コントローラを設定"><a href="#1-4-コントローラを設定" class="headerlink" title="1.4 コントローラを設定"></a>1.4 コントローラを設定</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rails g controller todo_lists</div><div class="line">rails g controller todo_items</div></pre></td></tr></table></figure>
-<h1 id="MVCの流れからCreateとRead"><a href="#MVCの流れからCreateとRead" class="headerlink" title="MVCの流れからCreateとRead"></a>MVCの流れからCreateとRead</h1><p><img src="/images/railsMVC.jpg" alt="image"><br>行われている手順は以下になります。</p>
-<h2 id="3-Gemパッケージのインストール"><a href="#3-Gemパッケージのインストール" class="headerlink" title="3 Gemパッケージのインストール"></a>3 Gemパッケージのインストール</h2>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#javascript runtime. for compile less</div><div class="line">gem &apos;therubyracer&apos;</div><div class="line"># make rails can use less.</div><div class="line">gem &apos;less-rails&apos;</div><div class="line"># bootstrap</div><div class="line">gem &apos;twitter-bootstrap-rails&apos;</div></pre></td></tr></table></figure>
-<p>  そして、gemをインストールします。</p>
+<h2 id="1-5-コントローラを設定"><a href="#1-5-コントローラを設定" class="headerlink" title="1.5 コントローラを設定"></a>1.5 コントローラを設定</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rails g controller todo_lists</div><div class="line">rails g controller todo_items</div></pre></td></tr></table></figure>
+<h1 id="2-MVCの流れからShowの説明"><a href="#2-MVCの流れからShowの説明" class="headerlink" title="2 MVCの流れからShowの説明"></a>2 MVCの流れからShowの説明</h1><h2 id="2-1-MVCの流れ"><a href="#2-1-MVCの流れ" class="headerlink" title="2.1 MVCの流れ"></a>2.1 MVCの流れ</h2><p><img src="/images/railsMVC.jpg" alt="image"><br>図の参照: <a href="http://railstutorial.jp/chapters/toy_app?version=4.2#sec-mvc_in_action" target="_blank" rel="external">http://railstutorial.jp/chapters/toy_app?version=4.2#sec-mvc_in_action</a><br>あるページをブラウザで開けて、行われている手順は以下になります。</p>
+<ol>
+<li>browserからURLのリクエストをRails サーバーに送信する</li>
+<li>このリクエストに対して、routerはどのモデルのコントローラのアクションを判断する</li>
+<li>このアクションの中で、具体的な命令をモデルに伝える</li>
+<li>モデルは命令の内容によって、データベースからデータを取り出す</li>
+<li>データはモデルからコントローラに返す</li>
+<li>コントローラはデータをインスタンス変数に保存し、Viewに渡す</li>
+<li>Viewが起動し、erbを実行してHTMLを生成する</li>
+<li>コントローラは、HTMLを受け取り、ブラウザに返す</li>
+</ol>
+<h2 id="2-2-MVCの流れでリストを表示"><a href="#2-2-MVCの流れでリストを表示" class="headerlink" title="2.2 MVCの流れでリストを表示"></a>2.2 MVCの流れでリストを表示</h2><p>rake routesを実行して、標準的なRESTfulアクションを表現できる<br><img src="/images/RESTful.jpg" alt="image"><br>showアクションのroutingは<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">todo_list GET    /todo_lists/:id(.:format)                   todo_lists#show</div></pre></td></tr></table></figure></p>
+<p>ここで、routingはidパラメータが必要です。<br>そして、コントローラのshowアクション<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def show</div><div class="line">    @todo_list = TodoList.find(params[:id])</div><div class="line">  end</div></pre></td></tr></table></figure></p>
+<p>Todo_listのidをデータベースから取り出して、@todo_listというインスタンス変数を保存して、viewに渡す。<br>そして、app/views/todo_lists/show.html.erbで下記の内容を追加する<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;</div><div class="line">  &lt;strong&gt;Title:&lt;/strong&gt;</div><div class="line">  &lt;%= @todo_list.title %&gt;</div><div class="line">&lt;/p&gt;</div></pre></td></tr></table></figure></p>
+<p>最後に、todoリストを表示できました</p>
+<p>#3  Bootstrapを利用して、使いやすいになる</p>
+<h2 id="3-1-Gemパッケージのインストール"><a href="#3-1-Gemパッケージのインストール" class="headerlink" title="3.1 Gemパッケージのインストール"></a>3.1 Gemパッケージのインストール</h2>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#javascript runtime. for compile less</div><div class="line">gem &apos;therubyracer&apos;</div><div class="line"># make rails can use less.</div><div class="line">gem &apos;less-rails&apos;</div><div class="line"># bootstrap</div><div class="line">gem &apos;twitter-bootstrap-rails&apos;</div></pre></td></tr></table></figure>
+<p>  そして、gemをインストールします。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bundle install</div></pre></td></tr></table></figure></p>
+<h2 id="3-2-todo-listにbootstrap導入-ViewファイルへのBootstrapの適用"><a href="#3-2-todo-listにbootstrap導入-ViewファイルへのBootstrapの適用" class="headerlink" title="3.2 todo_listにbootstrap導入(ViewファイルへのBootstrapの適用)"></a>3.2 todo_listにbootstrap導入(ViewファイルへのBootstrapの適用)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g bootstrap:themed todo_lists</div></pre></td></tr></table></figure>
+<h2 id="3-3-Bootstrap-css-を参照"><a href="#3-3-Bootstrap-css-を参照" class="headerlink" title="3.3 Bootstrap css を参照"></a>3.3 Bootstrap css を参照</h2><p><a href="http://getbootstrap.com/css/#type-headings" target="_blank" rel="external">bootstrap css</a><br>bootstrap の cssルールを参考して、画面を修正する</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/30/Todo-source-code-description/" data-id="cisgzfo4i0000kozjpurlxmh1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/30/Todo-source-code-description/" data-id="cish1wksl0001amzjr3r1u2q7" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -149,7 +164,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/30/hello-world/" data-id="cisgzfo4n0001kozjodr8cvkh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/30/hello-world/" data-id="cish1wksf0000amzj0kg4w9ec" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -184,7 +199,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -209,7 +224,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
