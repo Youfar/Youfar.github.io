@@ -19,7 +19,7 @@ MVCとはModel: データを扱う部分View: HTMLを作る部分Controller: ユ
 後ほど、詳">
 <meta property="og:image" content="http://yoursite.com/images/railsMVC.jpg">
 <meta property="og:image" content="http://yoursite.com/images/RESTful.jpg">
-<meta property="og:updated_time" content="2016-08-30T05:46:12.000Z">
+<meta property="og:updated_time" content="2016-08-30T05:47:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Todo source code description">
 <meta name="twitter:description" content="はじめに先日、Ruby on Railsを使って、簡単なTODOアプリを作りました。この記事では、このアプリのソースコードについて、簡単に解説します。
@@ -124,8 +124,7 @@ MVCとはModel: データを扱う部分View: HTMLを作る部分Controller: ユ
 <p>ここで、routingはidパラメータが必要です。<br>そして、コントローラのshowアクション<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def show</div><div class="line">    @todo_list = TodoList.find(params[:id])</div><div class="line">  end</div></pre></td></tr></table></figure></p>
 <p>Todo_listのidをデータベースから取り出して、@todo_listというインスタンス変数を保存して、viewに渡す。<br>そして、app/views/todo_lists/show.html.erbで下記の内容を追加する<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;</div><div class="line">  &lt;strong&gt;Title:&lt;/strong&gt;</div><div class="line">  &lt;%= @todo_list.title %&gt;</div><div class="line">&lt;/p&gt;</div></pre></td></tr></table></figure></p>
 <p>最後に、todoリストを表示できました</p>
-<p>#3  Bootstrapを利用して、使いやすいになる</p>
-<h2 id="3-1-Gemパッケージのインストール"><a href="#3-1-Gemパッケージのインストール" class="headerlink" title="3.1 Gemパッケージのインストール"></a>3.1 Gemパッケージのインストール</h2>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#javascript runtime. for compile less</div><div class="line">gem &apos;therubyracer&apos;</div><div class="line"># make rails can use less.</div><div class="line">gem &apos;less-rails&apos;</div><div class="line"># bootstrap</div><div class="line">gem &apos;twitter-bootstrap-rails&apos;</div></pre></td></tr></table></figure>
+<h1 id="3-Bootstrapを利用して、使いやすいになる"><a href="#3-Bootstrapを利用して、使いやすいになる" class="headerlink" title="3  Bootstrapを利用して、使いやすいになる"></a>3  Bootstrapを利用して、使いやすいになる</h1><h2 id="3-1-Gemパッケージのインストール"><a href="#3-1-Gemパッケージのインストール" class="headerlink" title="3.1 Gemパッケージのインストール"></a>3.1 Gemパッケージのインストール</h2>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#javascript runtime. for compile less</div><div class="line">gem &apos;therubyracer&apos;</div><div class="line"># make rails can use less.</div><div class="line">gem &apos;less-rails&apos;</div><div class="line"># bootstrap</div><div class="line">gem &apos;twitter-bootstrap-rails&apos;</div></pre></td></tr></table></figure>
 <p>  そして、gemをインストールします。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bundle install</div></pre></td></tr></table></figure></p>
 <h2 id="3-2-todo-listにbootstrap導入-ViewファイルへのBootstrapの適用"><a href="#3-2-todo-listにbootstrap導入-ViewファイルへのBootstrapの適用" class="headerlink" title="3.2 todo_listにbootstrap導入(ViewファイルへのBootstrapの適用)"></a>3.2 todo_listにbootstrap導入(ViewファイルへのBootstrapの適用)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g bootstrap:themed todo_lists</div></pre></td></tr></table></figure>
 <h2 id="3-3-Bootstrap-css-を参照"><a href="#3-3-Bootstrap-css-を参照" class="headerlink" title="3.3 Bootstrap css を参照"></a>3.3 Bootstrap css を参照</h2><p><a href="http://getbootstrap.com/css/#type-headings" target="_blank" rel="external">bootstrap css</a><br>bootstrap の cssルールを参考して、画面を修正する</p>
@@ -133,7 +132,7 @@ MVCとはModel: データを扱う部分View: HTMLを作る部分Controller: ユ
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/30/Todo-source-code-description/" data-id="cish1wksl0001amzjr3r1u2q7" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/30/Todo-source-code-description/" data-id="cish1zue90001c4zjzt7ses57" class="article-share-link">Partager</a>
       
       
     </footer>
